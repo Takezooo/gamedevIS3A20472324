@@ -13,13 +13,9 @@ public class CarMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
-        float h = Input.GetAxis("Horizontal");
-        float v = Input.GetAxis("Vertical");
-        //carSpeed = Gear.gear1MovementSpeed;
-        //carRotation = Gear.gear1RotationSpeed;
 
-        Vector3 pos = new Vector3(h, v, 0f).normalized;
+        float v = Input.GetAxis("Vertical");
+
 
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
@@ -40,20 +36,36 @@ public class CarMovement : MonoBehaviour
             Debug.Log("Shifted to Gear 3");
         }
 
+        Vector3 moveDirection = transform.up * v;
+        Vector3 newPosition = transform.position + moveDirection * carSpeed * Time.deltaTime;
 
-        Vector3 movement = pos * (carSpeed * Time.deltaTime);
-        transform.position += movement;
+        transform.position = newPosition;
 
-
-        if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow))
+        if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow))
         {
-            transform.Rotate(Vector3.forward * carRotation * Time.deltaTime);
+            if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow))
+            {
+                transform.Rotate(Vector3.forward * carRotation * Time.deltaTime);
 
+            }
+            if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow))
+            {
+                transform.Rotate(Vector3.back * carRotation * Time.deltaTime);
+
+            }
         }
-        if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow))
+        if (Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.DownArrow))
         {
-            transform.Rotate(Vector3.back * carRotation * Time.deltaTime);
+            if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow))
+            {
+                transform.Rotate(Vector3.back * carRotation * Time.deltaTime);
 
+            }
+            if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow))
+            {
+                transform.Rotate(Vector3.forward * carRotation * Time.deltaTime);
+
+            }
         }
 
     }
