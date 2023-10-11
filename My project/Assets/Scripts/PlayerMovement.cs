@@ -8,39 +8,74 @@ public class PlayerMovement : MonoBehaviour
 {
 
     public float speed = 5f;
+    public float jumpForce = 3f;
+    private bool canJump = true;
+    private Rigidbody2D rb;
+    private bool isGrounded = false;
 
     // Start is called before the first frame update
     void Start()
     {
-
+        rb = GetComponent<Rigidbody2D>();
     }
 
     // Update is called once per frame
     void Update()
     {
         float h = Input.GetAxis("Horizontal");
-        //float v = Input.GetAxis("Vertical");
         Vector2 pos = transform.position;
-        //pos.x += h * speed * Time.deltaTime;
         pos.x += h * speed * Time.deltaTime;
 
-        if (Input.GetButtonDown("Jump") && pos.y <= -2.51f)
+        isGrounded = IsGrounded();
+
+        // Add your jump input detection here
+        if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
         {
-            pos.y += Mathf.Sqrt(1 * -3.0f * -9.81f);
+            Jump();
         }
 
         transform.position = pos;
     }
 
     //Collision detector
-    /*
     private void OnCollisionEnter2D(Collision2D col)
     {
 
         Debug.Log("Collided");
+        canJump = true;
 
     }
+    void Jump()
+    {
+        rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
+    }
+    /*
+    void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Ground"))
+        {
+            canJump = true;
+        }
+    }
     */
+
+    bool IsGrounded()
+    {
+        // Cast a ray downwards to check for ground collision with the "Ground" layer
+        RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.down, 0.1f, LayerMask.GetMask("Ground"));
+
+        if (hit.collider != null)
+        {
+            Debug.Log("Grounded");
+        }
+        else
+        {
+            Debug.Log("Not Grounded");
+        }
+
+        return hit.collider != null;
+    }
+
 
 
 }
