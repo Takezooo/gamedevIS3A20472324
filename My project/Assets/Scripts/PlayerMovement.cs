@@ -8,10 +8,10 @@ public class PlayerMovement : MonoBehaviour
 {
 
     public float speed = 5f;
-    public float jumpForce = 3f;
-    private bool canJump = true;
+    public float jumpForce = 10f;
     private Rigidbody2D rb;
-    private bool isGrounded = false;
+    private bool canJump = true;
+    //private bool isGrounded = false;
 
     // Start is called before the first frame update
     void Start()
@@ -26,10 +26,10 @@ public class PlayerMovement : MonoBehaviour
         Vector2 pos = transform.position;
         pos.x += h * speed * Time.deltaTime;
 
-        isGrounded = IsGrounded();
+        //isGrounded = IsGrounded();
 
         // Add your jump input detection here
-        if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
+        if (Input.GetKeyDown(KeyCode.Space) && canJump)
         {
             Jump();
         }
@@ -47,7 +47,8 @@ public class PlayerMovement : MonoBehaviour
     }
     void Jump()
     {
-        rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
+        rb.AddForce(Vector3.up * jumpForce, ForceMode2D.Impulse);
+        canJump = false; // Disable jumping until the character lands
     }
     /*
     void OnCollisionEnter(Collision collision)
@@ -58,7 +59,7 @@ public class PlayerMovement : MonoBehaviour
         }
     }
     */
-
+    /*
     bool IsGrounded()
     {
         // Cast a ray downwards to check for ground collision with the "Ground" layer
@@ -75,6 +76,7 @@ public class PlayerMovement : MonoBehaviour
 
         return hit.collider != null;
     }
+    */
 
 
 
